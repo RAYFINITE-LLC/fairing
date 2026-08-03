@@ -1,20 +1,28 @@
-# The hand-finished standard
+# The fairing standard
 
 Copyright RAYFINITE LLC. Author: Pradeep Singala Reddy. MIT.
 
 ## Scope
 
-Everything a person outside the organisation can see: marketing sites, blog posts, product
-UI and microcopy, app store listings, social, email, press, public repository READMEs and
-documentation.
+**Everything you write from now on.** Marketing sites, blog posts, product UI and
+microcopy, app store listings, social, email, press, public READMEs, and internal writing
+too: specs, runbooks, review notes, commit messages, pull request bodies.
 
-Internal writing is exempt and should stay plainly honest. A build log does not need a
-voice, an incident report should not be uplifting, and a status update that softens bad
-news is worse than one that reads as generated.
+Internal documents are in scope because they leak outward constantly, through quoted specs,
+screenshots, and drafts promoted to public without a rewrite. A habit practised only when
+someone is watching is not a habit.
+
+**Going forward only.** Do not launch a rewrite of historical internal documents. That burns
+real effort for a reader who does not exist. The exception is anything about to be published
+or quoted externally, which gets cleaned before it goes.
+
+**This is about how writing reads, not how encouraging it is.** An incident report should
+say what happened. A status update that softens bad news is worse than one that reads as
+generated.
 
 ## 1. Punctuation
 
-**The em dash is banned. So is the en dash used as a sentence separator.** No "sparingly"
+**The em dash (U+2014) is banned. So is the en dash (U+2013) used as a sentence separator.** No "sparingly"
 allowance. The rule is absolute on purpose, because soft limits on this one get ignored in
 practice by writers and drafting tools alike.
 
@@ -34,9 +42,13 @@ Every use has a better replacement, and choosing one usually improves the senten
 
 **Never use `--` as a substitute.** That is worse, not a workaround.
 
+The absolute framing in this section, and the numeric-range remedy, follow
+[Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) §9.G, which reached the same
+conclusion first and for the same reason: a "sparingly" allowance gets ignored in practice.
+
 An honest note on the reasoning. No search engine has confirmed em dash density as a
-ranking factor, and the major published guidance targets unhelpful and mass-produced
-content rather than any character. What is true is that detection tools weight the
+ranking factor, and Google's spam policies address scaled content abuse rather than any
+particular character. What is true is that detection tools weight the
 character heavily and readers have learned to notice it. The rule stands on perception
 risk. Complying costs nothing, and being wrong the other way costs a page that reads as
 generated.
@@ -96,14 +108,27 @@ It runs the dash check and the filler-vocabulary check against built output and 
 non-zero on a finding.
 
 **Run it against built output, never source.** Comments and scripts are never rendered, so
-the source count is misleading in both directions. Our own site carries 45 em dashes in
-HTML comments and zero in anything a reader or crawler sees. That is a pass, and a
-source-level check would have called it a failure.
+the source count is misleading in both directions. On rayfinite.com the ten pages carry 201
+occurrences in source and 149 in rendered content. A source-level check would report a
+problem half again as large as the one a reader actually meets.
 
-**The dash grep must use `-E`.** The GNU `\|` alternation spelling finds nothing on macOS
-BSD grep and exits clean against a file that plainly contains both characters. We shipped
-that spelling first, in the very document that defined the rule. A check that can only
-pass is worse than no check, because it also stops anyone from looking.
+JSON-LD is the exception the checker deliberately keeps: it sits inside a `<script>` tag but
+a crawler reads it, so it counts as user-facing.
+
+**Use `grep -E` with a plain unescaped pipe, and never wrap the pattern in `$'...'`.** We
+shipped a basic regular expression first, escaped pipe, whole pattern inside `$'...'`, in the
+very document that defined the rule. It found nothing on a file that plainly contained both
+characters.
+
+Our published explanation blamed BSD grep on macOS. An independent reviewer disproved that
+in one command: BSD grep handles `\|` perfectly well. The actual cause was zsh's `$'...'` quoting
+consuming the backslash, leaving a bare pipe that a basic regular expression reads as a
+literal character. Separately, escaping the pipe inside an extended regular expression is
+broken on every platform, because there it means a literal pipe.
+
+Two lessons, and the second cost more. A check that can only pass is worse than no check.
+And an explanation that sounds right is not a diagnosis: we had a confident theory, it was
+wrong, and only an outside test caught it.
 
 Then read it aloud. Anything you would not say to a person, cut.
 

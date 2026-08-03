@@ -1,19 +1,20 @@
-# hand-finished
+# fairing
 
-**A standard for work that reads as made by a person.**
+**A standard for the visible layer.**
 
-Agents draft a great deal of what gets published now. That is not the problem. The
-problem is when the artifact announces it: the punctuation, the rhythm, the stock
-vocabulary, the paragraph that summarizes the paragraphs above it. A reader who notices
-those things stops reading the argument and starts reading the process. And a reader who
-suspects the words were not considered has no reason to believe the product was.
+A fairing is the outer shell that meets the air. In boatbuilding, fairing is also the work
+itself: running your hand along a hull and taking down every high spot until the surface is
+true. You cannot see a fair surface. You can only see an unfair one.
 
-In carpentry, rough work is the framing nobody sees. Finish work is the trim, the doors,
-the surfaces people actually touch and judge. This repository is about the finish.
+Published work has the same property. Agents draft a great deal of it now, and that is not
+the problem. The problem is when the artifact announces its own production: the punctuation,
+the rhythm, the stock vocabulary, the closing paragraph that restates the opening. A reader
+who notices those stops reading the argument and starts reading the process. Someone who
+suspects the words were not considered has little reason to believe the product was.
 
-The name is the claim, and it is deliberately narrow. It does not say a machine was never
-involved. It says the visible layer is held to a standard a person set, and that a person
-signed off on it.
+The name is deliberately narrow. It does not claim a machine was never involved. It says the
+surface that meets the reader has been faired: gone over by a person, with the high spots
+taken down.
 
 ## What is here
 
@@ -25,7 +26,7 @@ signed off on it.
 
 ## The short version
 
-1. **No em dash.** No en dash used as a separator. It is the most-cited tell and the
+1. **No em dash (U+2014).** No en dash (U+2013) used as a separator. It is the most-cited tell and the
    cheapest one to remove. Every use has a better replacement, and picking one usually
    improves the sentence.
 2. **No prose tells.** Uniform sentence rhythm, the rule of three on every heading,
@@ -49,14 +50,29 @@ It exits non-zero on a finding, so it drops into CI without ceremony.
 
 Some files legitimately contain the patterns: changelogs quoting old copy, style guides,
 vendored third-party content, before-and-after documentation. List them one path substring
-per line in `.hand-finished-ignore`. This repository uses one, because a document that
+per line in `.fairing-ignore`. This repository uses one, because a document that
 explains the em dash has to show you an em dash. That is the only exception we grant, and
 it is written down rather than special-cased inside the checker.
 
-One detail worth stating, because it cost us: the dash check **must** use `grep -E`. The
-GNU `\|` alternation spelling finds nothing on macOS and exits clean on every page, so the
-check passes whether or not the page is clean. We shipped that version first. A gate that
-cannot fail is worse than no gate, because it also stops anyone from looking.
+One detail worth stating, because it cost us twice.
+
+We first shipped this check as a basic regular expression, with the two dash characters
+joined by an escaped pipe and the whole pattern wrapped in `$'...'`. It found nothing on a
+file that plainly contained both. Our published explanation blamed BSD grep on macOS for not
+understanding escaped alternation. **That explanation was wrong.** An independent reviewer
+disproved it in one command: BSD grep handles it perfectly well.
+
+The real cause was the shell. In zsh, `$'...'` consumes the backslash, so what reached grep
+was a bare pipe, which a basic regular expression reads as a literal character. It went
+looking for a three-character string that was never there.
+
+Use `grep -E` with a plain unescaped pipe, and do not wrap the pattern in `$'...'`. Escaping
+the pipe inside an extended regular expression is broken too, on every platform, because
+there `\|` means a literal pipe.
+
+We kept the whole story rather than the corrected one-liner. A gate that cannot fail is
+worse than no gate, and we got both the bug and its explanation wrong before anyone
+checked.
 
 ## What this is not
 
@@ -71,7 +87,7 @@ ordering.
 
 ## Prior art we route to rather than repackage
 
-Two excellent MIT projects cover ground this standard leans on. We point at them and do
+Three excellent MIT projects cover ground this standard leans on. We point at them and do
 not vendor copies into this repository, because a second copy is a copy that drifts, and
 because their authors deserve the traffic:
 

@@ -1,7 +1,0 @@
-# Files that legitimately contain the patterns this standard bans.
-# One path substring per line. Lines starting with # are comments.
-#
-# This repository has to show the characters it bans in order to explain them.
-# That is the only legitimate exception, and it is worth being explicit that it
-# is an exception rather than quietly special-casing it in the checker.
-examples/before-after.md
