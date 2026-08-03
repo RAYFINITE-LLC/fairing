@@ -104,8 +104,14 @@ Two things are mechanical and should never be skipped.
 ./check.sh <built-output-directory>
 ```
 
-It runs the dash check and the filler-vocabulary check against built output and exits
-non-zero on a finding.
+It runs two checks against built output. **The dash check is a hard fail. The filler check
+is advisory and does not fail the build.**
+
+That split is deliberate. A dash either is or is not in the rendered text, so a machine can
+decide it. Filler cannot be decided by a word list: "a platform deciding what to elevate" is
+the literal verb, and a checker that fails the build on it teaches people to bypass the
+gate. Then nobody looks at the one that matters. Advisory checks get read; crying-wolf
+checks get `|| true` appended to them.
 
 **Run it against built output, never source.** Comments and scripts are never rendered, so
 the source count is misleading in both directions. On rayfinite.com the ten pages carried 201

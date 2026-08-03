@@ -133,7 +133,7 @@ fi
 echo
 
 # ---- 2. Filler vocabulary --------------------------------------------------
-echo "[2/2] filler vocabulary"
+echo "[2/2] filler vocabulary (advisory)"
 list_files | while IFS= read -r f; do
   case "$f" in *.json|*.xml|*.svg) continue ;; esac
   ignored "$f" && continue
@@ -147,8 +147,11 @@ list_files | while IFS= read -r f; do
   fi
 done
 if [ -f "$tmp/filler" ]; then
-  echo "  FAIL: filler found in $(wc -l < "$tmp/filler" | tr -d ' ') file(s)"
-  findings=$((findings + 1))
+  echo "  NOTE: filler candidates in $(wc -l < "$tmp/filler" | tr -d ' ') file(s). Read them; do not bulk-replace."
+  echo "        This check is ADVISORY and does not fail the build. A word list cannot"
+  echo "        tell filler from correct usage: \"a platform deciding what to elevate\""
+  echo "        is the literal verb, not padding. A gate that cries wolf gets bypassed,"
+  echo "        and then nobody looks at the one that matters."
 else
   echo "  pass"
 fi
