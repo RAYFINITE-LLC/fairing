@@ -46,7 +46,9 @@ taken down.
 ./check.sh dist/          # or build/, public/, _site/, wherever your output lands
 ```
 
-It exits non-zero on a finding, so it drops into CI without ceremony.
+It exits non-zero on a dash finding, so it drops into CI without ceremony. The filler check
+is **advisory** and never fails the build: a word list cannot tell padding from correct
+usage, and a gate that cries wolf is one people learn to bypass.
 
 Some files legitimately contain the patterns: changelogs quoting old copy, style guides,
 vendored third-party content, before-and-after documentation. List them one path substring
