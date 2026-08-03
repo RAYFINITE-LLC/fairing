@@ -72,6 +72,12 @@ prepare() {
 import re, sys
 raw = open(sys.argv[1], encoding="utf-8", errors="replace").read()
 raw = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)
+# Decode dash entities. A reader sees &mdash; as an em dash; a checker that only
+# looks for the literal character reports clean while the page is not.
+for ent in (r"&mdash;", r"&#8212;", r"&#x2014;"):
+    raw = re.sub(ent, "\u2014", raw, flags=re.I)
+for ent in (r"&ndash;", r"&#8211;", r"&#x2013;"):
+    raw = re.sub(ent, "\u2013", raw, flags=re.I)
 # Keep application/ld+json: a crawler reads it, so it is user-facing.
 def drop(m):
     return " " if "ld+json" not in (m.group(0)[:200].lower()) else m.group(0)
@@ -105,14 +111,14 @@ list_files() {
 }
 
 # ---- 1. Dashes -------------------------------------------------------------
-echo "[1/2] em dash and separator en dash"
+echo "[1/2] em dash and separator en dash (literal and entity-encoded)"
 hits=0
 list_files | while IFS= read -r f; do
   if ignored "$f"; then echo "skip" >> "$tmp/skips"; continue; fi
   echo "x" >> "$tmp/scanned"
   prepare "$f" "$tmp/x"
   set +e
-  n=$(grep -oE '—|–' "$tmp/x" 2>/dev/null | wc -l | tr -d ' ')
+  n=$(grep -oEi '—|–|&mdash;|&ndash;|&#8212;|&#8211;|&#x2014;|&#x2013;' "$tmp/x" 2>/dev/null | wc -l | tr -d ' ')
   rc=$?
   set -e
   if [ "$rc" -gt 1 ]; then
