@@ -22,6 +22,8 @@ taken down.
 |---|---|
 | [`STANDARD.md`](STANDARD.md) | The standard itself. Scope, the rules, and the definition of done. |
 | [`check.sh`](check.sh) | The mechanical half. Two greps you can run in CI today. |
+| [`verify-nothing-moved.sh`](verify-nothing-moved.sh) | Proves a copy edit changed punctuation and nothing else. Run it BEFORE you commit. |
+| [`verify-scope-kept.sh`](verify-scope-kept.sh) | Catches a rewritten heading that quietly dropped a qualifier the claim depends on. |
 | [`examples/before-after.md`](examples/before-after.md) | Real edits from our own site, with the reasoning for each choice. |
 
 ## The short version
@@ -100,8 +102,35 @@ because their authors deserve the traffic:
   [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) for the visual and
   layout tells, which this standard deliberately does not restate.
 
+## Two checks that exist because we broke things
+
+`check.sh` tells you a dash is gone. It cannot tell you the edit was safe. These two can,
+and both were written after a review caught something the dash check happily approved.
+
+```sh
+./verify-nothing-moved.sh origin/main public   # before you commit a bulk copy edit
+./verify-scope-kept.sh public                  # after you rewrite any heading
+```
+
+**`verify-nothing-moved.sh`** compares the word stream against a git ref, ignoring
+punctuation and markup. Any word added, dropped or reordered fails. We wrote it after a
+punctuation rule matched one dash against another across a semicolon and turned two
+lawful-basis citations in a privacy policy into one basis with a dangling reference. The
+dash count was perfect. The meaning was not.
+
+**`verify-scope-kept.sh`** compares a page heading against the claim it is about, on
+scope-bearing tokens only: negations, universals, quantities, and qualifiers like "with the
+naked eye". Rephrasing is fine and expected. Dropping a qualifier is not. We wrote it after
+shortening "visible from space with the naked eye" to "visible from space", which is a
+different claim, and only one of them is false.
+
+Both are deliberately narrow. The first ignores wording entirely. The second ignores
+everything except the words that decide what is being asserted. Wide checks produce noise,
+and a noisy check gets bypassed.
+
 If you only adopt one thing from this repository, adopt `check.sh` and point it at your
-build output. The rest is judgment, and judgment does not install.
+build output. If you adopt two, add `verify-nothing-moved.sh`. The rest is judgment, and
+judgment does not install.
 
 ## Related
 
