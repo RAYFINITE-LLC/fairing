@@ -108,9 +108,16 @@ It runs the dash check and the filler-vocabulary check against built output and 
 non-zero on a finding.
 
 **Run it against built output, never source.** Comments and scripts are never rendered, so
-the source count is misleading in both directions. On rayfinite.com the ten pages carry 201
-occurrences in source and 149 in rendered content. A source-level check would report a
-problem half again as large as the one a reader actually meets.
+the source count is misleading in both directions. On rayfinite.com the ten pages carried 201
+occurrences in source and 155 in rendered content, 154 em dashes and one en dash. A
+source-level check would have reported a problem a third larger than the one a reader
+actually met.
+
+That 155 figure is itself a correction. We first published 149 here, measured by stripping
+every `<script>` block before counting. That silently removed the JSON-LD, where six of them
+were sitting, and JSON-LD is exactly what a crawler reads. An independent reviewer counted
+JSON-LD separately and caught it, which is why `check.sh` now keeps JSON-LD and strips only
+the script bodies a reader never sees.
 
 JSON-LD is the exception the checker deliberately keeps: it sits inside a `<script>` tag but
 a crawler reads it, so it counts as user-facing.
