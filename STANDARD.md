@@ -128,6 +128,12 @@ the script bodies a reader never sees.
 JSON-LD is the exception the checker deliberately keeps: it sits inside a `<script>` tag but
 a crawler reads it, so it counts as user-facing.
 
+**Count entities as well as characters.** `&mdash;` renders as an em dash and a checker that
+only looks for the literal character reports clean on a page full of them. We shipped exactly
+that mistake: a site we had declared clean was still serving 135 entity-encoded dashes, found
+by a reviewer rather than by the tool. `check.sh` now decodes `&mdash;`, `&ndash;` and their
+numeric forms before counting.
+
 **Use `grep -E` with a plain unescaped pipe, and never wrap the pattern in `$'...'`.** We
 shipped a basic regular expression first, escaped pipe, whole pattern inside `$'...'`, in the
 very document that defined the rule. It found nothing on a file that plainly contained both
