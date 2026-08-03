@@ -1,0 +1,9 @@
+# Files that legitimately contain the patterns this standard bans.
+# One path substring per line. Lines starting with # are comments.
+#
+# Only one entry, deliberately. README.md and STANDARD.md name the characters by
+# codepoint (U+2014, U+2013) rather than pasting them, so they pass the check on
+# their own merits. The before/after document has to show the real characters to
+# be worth anything, so it is the single exception, written down rather than
+# quietly special-cased inside the checker.
+examples/before-after.md
