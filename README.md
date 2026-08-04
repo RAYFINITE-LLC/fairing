@@ -28,9 +28,9 @@ taken down.
 
 ## The short version
 
-1. **No em dash (U+2014).** No en dash (U+2013) used as a separator. It is the most-cited tell and the
-   cheapest one to remove. Every use has a better replacement, and picking one usually
-   improves the sentence.
+1. **Polish the punctuation.** We do not use the em dash (U+2014), or the en dash (U+2013)
+   as a separator. It is the most-cited tell and the cheapest one to fix. Every use has a
+   better replacement, and picking one usually improves the sentence.
 2. **No prose tells.** Uniform sentence rhythm, the rule of three on every heading,
    "not X, but Y" three times a page, filler vocabulary, stacked hedges, a closing
    paragraph that restates the opening.

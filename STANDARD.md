@@ -22,11 +22,16 @@ generated.
 
 ## 1. Punctuation
 
-**The em dash (U+2014) is banned. So is the en dash (U+2013) used as a sentence separator.** No "sparingly"
-allowance. The rule is absolute on purpose, because soft limits on this one get ignored in
-practice by writers and drafting tools alike.
+**We do not use the em dash (U+2014), or the en dash (U+2013) as a sentence separator.**
 
-Every use has a better replacement, and choosing one usually improves the sentence.
+Neither is wrong English. The reason is simpler: a page dense with them has come to read as
+machine written, and every single use has a better replacement that usually improves the
+sentence. Polishing them out is a small edit that makes writing sound more like a person
+wrote it.
+
+We apply this consistently rather than case by case. A "use sparingly" guideline gets
+interpreted away in practice, by writers and drafting tools alike, and then the page is back
+where it started.
 
 | Instead of an em dash | Use | Example |
 |---|---|---|
@@ -42,9 +47,9 @@ Every use has a better replacement, and choosing one usually improves the senten
 
 **Never use `--` as a substitute.** That is worse, not a workaround.
 
-The absolute framing in this section, and the numeric-range remedy, follow
+The consistent-rather-than-occasional approach here, and the numeric-range remedy, follow
 [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) §9.G, which reached the same
-conclusion first and for the same reason: a "sparingly" allowance gets ignored in practice.
+conclusion first and for the same reason.
 
 An honest note on the reasoning. No search engine has confirmed em dash density as a
 ranking factor, and Google's spam policies address scaled content abuse rather than any
@@ -92,9 +97,9 @@ Not restated here. The visual and layout tells are covered thoroughly by
 feature rows, section-number eyebrows, version-label hero badges, fake product screenshots
 built from `div` rectangles, default component-library styling left untouched.
 
-Two of those projects contradict each other on punctuation. One prescribes the em dash,
-the other bans it. Decide once, write the decision down, and stop re-deciding it per page.
-This standard bans it.
+Two of those projects contradict each other on punctuation. One prescribes the em dash, the
+other avoids it. Decide once, write the decision down, and stop re-deciding it per page.
+This standard avoids it.
 
 ## 5. The check
 
