@@ -24,6 +24,7 @@ taken down.
 | [`check.sh`](check.sh) | The mechanical half. Two greps you can run in CI today. |
 | [`verify-nothing-moved.sh`](verify-nothing-moved.sh) | Proves a copy edit changed punctuation and nothing else. Run it BEFORE you commit. |
 | [`verify-scope-kept.sh`](verify-scope-kept.sh) | Catches a rewritten heading that quietly dropped a qualifier the claim depends on. |
+| [`verify-still-works.sh`](verify-still-works.sh) | Snapshot the live site before a deploy, verify after. Fails if a route that worked stopped working. |
 | [`examples/before-after.md`](examples/before-after.md) | Real edits from our own site, with the reasoning for each choice. |
 
 ## The short version
@@ -128,9 +129,35 @@ Both are deliberately narrow. The first ignores wording entirely. The second ign
 everything except the words that decide what is being asserted. Wide checks produce noise,
 and a noisy check gets bypassed.
 
+## The check that runs after you deploy, not before
+
+```sh
+./verify-still-works.sh snapshot https://example.com routes.json   # before
+# deploy
+./verify-still-works.sh verify   https://example.com routes.json   # after
+```
+
+Everything above tests what you are about to ship. This one tests what you just did to the
+site that was already there, which is a different question and the one that bites hardest.
+
+It discovers routes from the sitemap and the homepage links, records status, title and body
+size for each, then re-checks them after the deploy. It fails if a route that returned 200
+no longer does, or if a page kept its status but lost more than half its content. Title
+changes are reported as notes rather than failures, since renaming a page is usually
+deliberate.
+
+We wrote it the day a deploy from one repository silently removed a page served from a
+different repository into the same host project. Every check we had passed. The copy was
+clean, the links resolved, the build succeeded, and a page that had worked for a month was
+gone. Nothing we owned compared the site to the site that existed a minute earlier.
+
+Verified against that exact incident: it reports `\/app  was 200, now 404` and exits 1
+against the broken deployment, exits 0 against the repaired one, and also catches the case
+where a page still answers 200 having lost most of its body.
+
 If you only adopt one thing from this repository, adopt `check.sh` and point it at your
-build output. If you adopt two, add `verify-nothing-moved.sh`. The rest is judgment, and
-judgment does not install.
+build output. If you adopt two, add `verify-still-works.sh`, because losing a page is worse
+than shipping a dash. The rest is judgment, and judgment does not install.
 
 ## Related
 
