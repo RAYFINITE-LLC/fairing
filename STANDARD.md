@@ -158,7 +158,21 @@ wrong, and only an outside test caught it.
 
 Then read it aloud. Anything you would not say to a person, cut.
 
-## 6. Definition of done
+## 6. After the deploy
+
+Publishing is not the last step. Take a route snapshot before you deploy and verify after:
+
+```sh
+./verify-still-works.sh snapshot https://example.com routes.json
+./verify-still-works.sh verify   https://example.com routes.json
+```
+
+A deploy replaces what was there. If your host serves one project from more than one source,
+or your build output is assembled rather than committed, a clean deploy can remove a working
+page and report success. Ours did. The gate is cheap and it compares the site to the site
+that existed a minute earlier, which nothing else here does.
+
+## 7. Definition of done
 
 A page is not publishable until all three hold:
 
